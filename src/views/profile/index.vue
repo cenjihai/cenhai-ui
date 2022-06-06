@@ -8,7 +8,6 @@
         <div style="margin: auto" class="cenhai-tabs">
           <el-tabs v-model="tabPane" :tab-position="'left'" :stretch="true" @tab-click="tabClick">
             <el-tab-pane label="个人资料" name="myInfo"></el-tab-pane>
-            <el-tab-pane label="账号信息" name="accountInfo"></el-tab-pane>
             <el-tab-pane label="退出登录" name="logout"></el-tab-pane>
           </el-tabs>
         </div>
@@ -16,7 +15,6 @@
       </el-aside>
       <el-main>
         <my-info :user-info="userInfo" v-if="tabPane === 'myInfo'"></my-info>
-        <account-info v-if="tabPane === 'accountInfo'"></account-info>
       </el-main>
     </el-container>
   </div>
@@ -26,7 +24,6 @@
 import {useUserStore} from "../../store/user";
 import {ref} from "vue";
 import MyInfo from "@/components/profile/MyInfo.vue"
-import AccountInfo from "@/components/profile/AccountInfo.vue"
 import {ElMessage, ElMessageBox} from "element-plus";
 import {useRouter} from "vue-router";
 

@@ -59,7 +59,7 @@ const submitForm = () => {
 
 const getData = () => {
   loading.value = true
-  http.get("/profile/getUserAuthInfo/password",{}).then(res => {
+  http.get("/profile/getUserAuthInfo",{}).then(res => {
     if (!res.data){
       ElMessage({message:'未设置密码认证方式!',type:'error'})
       return

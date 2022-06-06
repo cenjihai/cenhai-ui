@@ -69,6 +69,11 @@ class Http {
     delete(url, params, _object = {}) {
         return this.service.delete(url, { params, ..._object })
     }
+    /* 获取配置 */
+    getConfig() {
+        return config;
+    }
 }
 
 export default new Http(config)
+

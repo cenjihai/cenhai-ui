@@ -25,7 +25,6 @@ onMounted(() => {
   window.onresize = () => {
     return(() => {
       bodyHeight.value = document.body.clientHeight - 120;
-      console.log(bodyHeight.value)
     })()
   }
 })

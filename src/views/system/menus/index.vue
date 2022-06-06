@@ -21,9 +21,9 @@
             <el-tag v-if="data.field.type ==='P'" style="margin-left: 10px" effect="dark" size="small" type="danger">权限</el-tag>
           </span>
           <div>
-            <a v-if="data.field && data.field.type !== 'P'" @click="openForm(node,data,'add')"><font-awesome-icon :icon="faIcons['faAdd']"/></a>
-            <a  v-if="data.field" @click="openForm(node,data,'edit')"><font-awesome-icon :icon="faIcons['faEdit']"/></a>
-            <el-popconfirm  v-if="data.field" title="确定要删除这个项吗？" @confirm="deleteNode(node,data)">
+            <a v-if="data.field.type !== 'P'" @click="openForm(node,data,'add')"><font-awesome-icon :icon="faIcons['faAdd']"/></a>
+            <a  v-if="data.field.type" @click="openForm(node,data,'edit')"><font-awesome-icon :icon="faIcons['faEdit']"/></a>
+            <el-popconfirm  v-if="data.field.type" title="确定要删除这个项吗？" @confirm="deleteNode(node,data)">
               <template #reference>
                 <a><font-awesome-icon :icon="faIcons['faRemove']"/></a>
               </template>
@@ -49,8 +49,8 @@
         <el-form-item :label="text[clickNodeData.field.type] + '名称'">
           <el-input v-model="clickNodeData.field.name" placeholder="菜单名称"/>
         </el-form-item>
-        <el-form-item label="菜单地址" v-if="clickNodeData.field.type === 'M'">
-          <el-input v-model="clickNodeData.field.path" placeholder="菜单访问地址，路由前后不要输入/"/>
+        <el-form-item label="菜单地址" v-if="clickNodeData.field.type !== 'P'">
+          <el-input v-model="clickNodeData.field.path" placeholder="菜单或目录访问地址，前后不要输入/"/>
         </el-form-item>
         <el-form-item label="权限字符" v-if="clickNodeData.field.type === 'P'">
           <el-input v-model="clickNodeData.field.permKey" placeholder="权限字符"/>
@@ -78,8 +78,8 @@
         <el-form-item label="隐藏" v-if="clickNodeData.field.type !== 'P'">
           <el-tooltip content="隐藏后不在菜单出现，但是依然能访问" placement="top">
             <el-radio-group v-model="clickNodeData.field.hidden">
-              <el-radio label="0">显示</el-radio>
-              <el-radio label="1">隐藏</el-radio>
+              <el-radio label="N">显示</el-radio>
+              <el-radio label="Y">隐藏</el-radio>
             </el-radio-group>
           </el-tooltip>
         </el-form-item>
@@ -172,9 +172,9 @@ const openForm = (node, data, event) =>{
       menuOrder: 1,
       icon: undefined,
       component: undefined,
-      parentMenuId: data.field ? data.field.menuId : data.id,
+      parentMenuId: data.field.menuId ? data.field.menuId : data.id,
       status: '0',
-      hidden: '0',
+      hidden: 'N',
       type: 'M',
       permKey: undefined
     }}

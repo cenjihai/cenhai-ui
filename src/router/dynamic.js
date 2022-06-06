@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.vue"
 import {useMenuStore} from "../store/menu";
 import {getToken} from "../utils/token";
 
-const modules = import.meta.glob('/src/views/*/*/*.vue');
+const modules = import.meta.glob('/src/views/**/*.vue');
 
 
 router.beforeEach((to, from, next) => {
@@ -46,7 +46,7 @@ function setComponent(list) {
         if (item.children.length > 0){
             setComponent(item.children)
         }else {
-            item.component = modules['/src/views/'+item.component + '.vue']
+            item.component = modules[`/src/views/${item.component}.vue`]
         }
     })
 }

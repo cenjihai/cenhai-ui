@@ -149,7 +149,7 @@
       </template>
     </el-dialog>
 
-    <el-dialog v-model="passwordDialogVisible" title="账号设置" width="450px" destroy-on-close>
+    <el-dialog v-model="passwordDialogVisible" title="账号密码设置" width="450px" destroy-on-close>
       <el-form v-if="userAuthForm"
                :model="userAuthForm"
                v-loading="loading"
@@ -289,7 +289,7 @@ const openPasswordForm = (data) => {
 
 const getUserAuthData = (userId) => {
   loading.value = true;
-  http.get("/userauth/getByIdentityTypeAndUserId/password/" + userId,{}).then(res => {
+  http.get("/userauth/getPasswordType/" + userId,{}).then(res => {
     if (res.data){
       userAuthForm.value = res.data
       userAuthForm.value.credential = undefined
