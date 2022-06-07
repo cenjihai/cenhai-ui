@@ -111,10 +111,10 @@ export default {
 
 import QueryGroup from "@/components/QueryGroup.vue"
 import {ref} from "vue";
-import http from "../../../utils/http";
 import {ElMessage} from "element-plus";
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons"
 import AssignMenu from "@/components/AssignMenu.vue"
+import {delRole, listRole, updateOrSaveRole} from "../../../api/system/role";
 
 const tableLoading = ref(false)
 const loading = ref(false)
@@ -169,20 +169,22 @@ const formDialogVisible = ref(false)
 const formDialogTitle = ref()
 
 const statusChange = (data) =>{
-  http.post("/role/updateOrSave",data).then(res => {
+  updateOrSaveRole(data).then(res => {
 
   })
 }
 
 const submitForm = () => {
   loading.value = true
-  http.post("/role/updateOrSave",roleForm.value).then(res => {
+  updateOrSaveRole(roleForm.value).then(res => {
     loading.value = false
     formDialogVisible.value = false
+    getData()
     ElMessage({
       message: res.msg,
       type: 'success'
     })
+
   }).catch(err => {
     loading.value = false
   })
@@ -214,7 +216,7 @@ const deleteRole = (roleIds) => {
     })
   }
   loading.value = true;
-  http.post("/role/delete",roleIds).then(res => {
+  delRole(roleIds).then(res => {
     getData()
     ElMessage({
       message: res.msg,
@@ -239,7 +241,7 @@ const reset = (data) => {
 
 const getData = () => {
   tableLoading.value = true;
-  http.get("/role/list",Object.assign(page.value,queryForm.value)).then(res => {
+  listRole(queryForm.value,page.value).then(res => {
     dataSource.value = res.data.rows;
     total.value = res.data.total
     tableLoading.value = false

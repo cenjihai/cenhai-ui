@@ -18,7 +18,7 @@
         :data="dataSource"
         max-height="900px"
         style="width: 100%"
-        v-loading="tableLoading">
+        v-loading="loading">
       <el-table-column prop="pluginId" label="插件ID"/>
       <el-table-column prop="name" label="插件名称" />
       <el-table-column prop="description" label="说明" />
@@ -32,10 +32,9 @@
       </el-table-column>
       <el-table-column label="操作" width="200">
         <template #default="scope">
-          <el-button v-if="scope.row.status ==='1'" type="success" size="small" @click="changeStatus(scope.row,'0')">启动</el-button>
-          <el-button v-if="scope.row.status ==='0'" type="danger" size="small"  @click="changeStatus(scope.row,'1')">禁用</el-button>
-          <el-button type="primary" size="small" @click="openSetting(scope.row)">设置</el-button>
-          <el-button v-if="scope.row.isInstall === 'N'" type="success" size="small">安装</el-button>
+          <el-button v-if="scope.row.status ==='1' && scope.row.isInstall ==='Y'" type="success" size="small" @click="changeStatus(scope.row,'0')">启动</el-button>
+          <el-button v-if="scope.row.status ==='0' && scope.row.isInstall ==='Y'" type="danger" size="small"  @click="changeStatus(scope.row,'1')">禁用</el-button>
+          <el-button v-if="scope.row.isInstall ==='Y'" type="primary" size="small" @click="openSetting(scope.row)">设置</el-button>
           <el-popconfirm v-if="scope.row.isInstall === 'Y'" title="确定要卸载?" @confirm="uninstall(scope.row)">
             <template #reference>
               <el-button size="small">卸载</el-button>
@@ -53,7 +52,7 @@
                    @current-change="getData"
                    :total="total" />
 
-    <el-dialog v-model="dialogSettingVisible" title="设置">
+    <el-dialog v-model="dialogSettingVisible" title="设置" destroy-on-close>
       <iframe :src="settingUrl" style="width: 100%;height: 100%" scrolling="no" frameborder="no"/>
     </el-dialog>
 
@@ -74,8 +73,9 @@ import {faPlay, faStop} from "@fortawesome/free-solid-svg-icons"
 import {getToken} from "../../utils/token";
 import http from "../../utils/http";
 import {ElMessage} from "element-plus";
-const tableLoading = ref(false)
+import {changePluginStatus, listPlugin, uninstallPlugin} from "../../api/plugin";
 const loading = ref(false)
+
 
 //设置
 const dialogSettingVisible = ref(false)
@@ -89,8 +89,8 @@ const openSetting = (row) => {
 const changeStatus = (row, status) => {
   loading.value = true;
   row.status = status;
-  http.post("/plugin/changeStatus",row).then(res => {
-    loading.value = true
+  changePluginStatus(row).then(res => {
+    loading.value = false
     ElMessage({
       message: res.msg,
       type: "success"
@@ -105,7 +105,7 @@ const changeStatus = (row, status) => {
 
 const uninstall = (row) => {
   loading.value = true
-  http.post("/plugin/uninstall/" + row.pluginId, {}).then(res => {
+  uninstallPlugin(row.pluginId).then(res => {
     loading.value = false
     ElMessage({
       message: res.msg,
@@ -182,13 +182,13 @@ const reset = (data) => {
 }
 
 const getData = () => {
-  tableLoading.value = true;
-  http.get("/plugin/list",Object.assign(page.value,queryForm.value)).then(res => {
+  loading.value = true;
+  listPlugin(queryForm.value,page.value).then(res => {
     dataSource.value = res.data.rows;
     total.value = res.data.total
-    tableLoading.value = false
+    loading.value = false
   }).catch(err => {
-    tableLoading.value = false
+    loading.value = false
   })
 }
 getData()

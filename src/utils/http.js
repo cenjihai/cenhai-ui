@@ -5,6 +5,7 @@ import {ElMessage} from "element-plus";
 const config = {
     timeout: 5000,
     baseURL: "http://localhost:8080"
+    //baseURL: "http://124.221.213.135:8080"
 }
 
 class Http {

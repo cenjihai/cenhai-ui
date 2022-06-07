@@ -34,6 +34,7 @@ onMounted(() => {
 <style scoped>
 .global-content {
   margin-left: 10px;
+  margin-right: 10px;
 }
 /*页面切换动画*/
 /*进入过渡的结束状态，元素被插入时就生效，在过渡过程完成后移除*/

@@ -50,8 +50,8 @@
 <script setup>
 import ImgCutter from "vue-img-cutter"
 import {ref} from "vue";
-import http from "../../utils/http";
 import {ElMessage} from "element-plus";
+import {updateUserInfo} from "../../api/profile";
 
 const props = defineProps(['userInfo'])
 const loading = ref(false)
@@ -61,7 +61,7 @@ const cutDown = (event) => {
 
 const submitForm = () => {
   loading.value = true;
-  http.post("/profile/update",props.userInfo).then(res => {
+  updateUserInfo(props.userInfo).then(res => {
     loading.value = false
     ElMessage({
       message: res.msg,

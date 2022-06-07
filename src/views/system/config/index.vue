@@ -87,9 +87,9 @@ export default {
 <script setup>
 
 import {ref} from "vue";
-import http from "../../../utils/http";
 import * as faIcons from "@fortawesome/free-solid-svg-icons"
 import {ElMessage} from "element-plus";
+import {batchUpdate, listConfig, listGroup} from "../../../api/system/config";
 
 const loading = ref(false)
 const groupData = ref()
@@ -103,7 +103,7 @@ const tabClick = (pane, ev) => {
 const submitForm = () => {
   if (!configData.value)return;
   loading.value = true;
-  http.post("/config/batchUpdate",configData.value).then(res => {
+  batchUpdate(configData.value).then(res => {
     loading.value = false
     ElMessage({
       message: res.msg,
@@ -116,7 +116,7 @@ const submitForm = () => {
 
 const getConfigData =(groupId) => {
   loading.value = true;
-  http.get("/config/listConfig/" + groupId,{}).then(res => {
+  listConfig(groupId).then(res => {
     loading.value = false;
     res.data.forEach(item => {
       if (item.options){
@@ -136,7 +136,7 @@ const getConfigData =(groupId) => {
 
 const getGroupData = () => {
   loading.value = true;
-  http.get("/config/listGroup",{}).then(res => {
+  listGroup().then(res => {
     groupData.value = res.data;
     loading.value = false
   }).catch(err => {

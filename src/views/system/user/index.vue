@@ -195,10 +195,12 @@ export default {
 <script setup>
 import QueryGroup from "@/components/QueryGroup.vue"
 import {ref} from "vue";
-import http from "../../../utils/http";
 import {sexConverter} from "@/utils/common"
 import {ElMessage} from "element-plus";
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons"
+import {delUser, getPasswordType, updateRole,listUser, updateOrSaveUserAuthByPassword,updateOrSaveUser} from "@/api/system/user";
+import {getUserRole} from "@/api/system/role";
+
 
 const loading = ref(false)
 const tableLoading = ref(false)
@@ -249,7 +251,7 @@ const query = (data) => {
 }
 const getData = () =>{
   tableLoading.value = true;
-  http.get("/user/list",Object.assign(page.value,queryForm.value)).then(res => {
+  listUser(queryForm.value,page.value).then(res => {
     userList.value = res.data.rows
     total.value = res.data.total
     tableLoading.value = false
@@ -270,7 +272,7 @@ const userAuthForm = ref()
 
 const submitUserAuthForm = () => {
   loading.value = true;
-  http.post("/userauth/updateOrSaveUserAuthByPassword",userAuthForm.value).then(res => {
+  updateOrSaveUserAuthByPassword(userAuthForm.value).then(res => {
     loading.value = false
     passwordDialogVisible.value = false
     ElMessage({
@@ -289,7 +291,7 @@ const openPasswordForm = (data) => {
 
 const getUserAuthData = (userId) => {
   loading.value = true;
-  http.get("/userauth/getPasswordType/" + userId,{}).then(res => {
+  getPasswordType(userId).then(res => {
     if (res.data){
       userAuthForm.value = res.data
       userAuthForm.value.credential = undefined
@@ -314,7 +316,7 @@ const roleDetails = ref();
 const openRoleDialog = (userData) => {
   roleDialogVisible.value = true
   loading.value = true;
-  http.get("/role/getUserRole/" + userData.userId,{}).then(res => {
+  getUserRole(userData.userId).then(res => {
     roleDetails.value = res.data;
     roleDetails.value.userId = userData.userId;
     loading.value = false
@@ -325,7 +327,7 @@ const openRoleDialog = (userData) => {
 
 const submitRoleForm = () => {
   loading.value = true;
-  http.post("/user/updateRole/" + roleDetails.value.userId,roleDetails.value.userRole).then(res => {
+  updateRole(roleDetails.value.userId,roleDetails.value.userRole).then(res => {
     loading.value = false
     ElMessage({
       message: res.msg,
@@ -362,14 +364,14 @@ const openDialog = (data) => {
 
 const submitUserForm = () => {
   loading.value = true;
-  http.post("/user/updateOrSave",userForm.value).then(res => {
+  updateOrSaveUser(userForm.value).then(res => {
     loading.value = false
     dialogFormVisible.value = false
     ElMessage({
       message : res.msg,
       type: 'success'
     })
-
+    getData()
   }).catch(err => {
     loading.value = false
   })
@@ -389,7 +391,7 @@ const deleteUser = (userIds) =>{
     })
   }
   loading.value = true;
-  http.post("/user/delete",userIds).then(res => {
+  delUser(userIds).then(res => {
     loading.value = false
     getData()
     ElMessage({

@@ -117,8 +117,8 @@ export default {
 
 import QueryGroup from "@/components/QueryGroup.vue"
 import {ref} from "vue";
-import http from "../../../utils/http";
 import {ElMessage} from "element-plus";
+import {delOperlog, listOperlog, operlogDetails} from "../../../api/monitor/operlog";
 
 
 const tableLoading = ref(false)
@@ -161,7 +161,7 @@ const details = ref()
 const detailsDialogVisible = ref(false);
 const openDialog = (data) => {
   loading.value = true;
-  http.get("/monitor/operlog/" + data.operId,{}).then(res => {
+  operlogDetails(data.operId).then(res => {
     details.value = res.data;
     loading.value = false
     detailsDialogVisible.value = true;
@@ -181,7 +181,7 @@ const deleteOperlog = (operIds) => {
     })
   }
   loading.value = true;
-  http.post("/monitor/operlog/delete",operIds).then(res => {
+  delOperlog(operIds).then(res => {
     getData()
     ElMessage({
       message: res.msg,
@@ -207,7 +207,7 @@ const reset = (data) => {
 
 const getData = () => {
   tableLoading.value = true;
-  http.get("/monitor/operlog/list",Object.assign(page.value,queryForm.value)).then(res => {
+  listOperlog(queryForm.value,page.value).then(res => {
     dataSource.value = res.data.rows;
     total.value = res.data.total
     tableLoading.value = false
