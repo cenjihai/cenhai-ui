@@ -13,7 +13,7 @@
 
       <el-table-column prop="name" label="名称" width="150">
         <template #default="scope">
-          <font-awesome-icon :icon="faIcons[scope.row.icon]" />
+          <font-awesome-icon v-if="scope.row.type !== 'P'" :icon="faIcons[scope.row.icon]" />
           {{scope.row.name}}
         </template>
       </el-table-column>
@@ -55,7 +55,7 @@
           <el-tag v-if="scope.row.type === 'C'" type="info">目录</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column label="操作" width="220">
         <template #default="scope">
           <el-button type="success" size="small" @click="openForm(scope.row,'add')">新增</el-button>
           <el-button type="primary" size="small" @click="openForm(scope.row,'edit')">编辑</el-button>
@@ -168,12 +168,35 @@ const deleteMenu = (data) => {
       message: res.msg,
       type: "success"
     })
-    getData()
+    removeNode(menuData.value,data)
   }).catch(err => {
     loading.value = false
   })
 }
 
+function removeNode(nodes, node){
+  for (let i = 0, len = nodes.length;i < len; i ++){
+    if (nodes[i] == node){
+      nodes.splice(i, 1)
+    }else {
+      if (nodes[i].children && nodes[i].children.length > 0){
+        removeNode(nodes[i].children, node)
+      }
+    }
+  }
+}
+
+function addNode(nodes,parentId, node){
+  for (let i = 0, len = nodes.length;i < len; i ++){
+    if (nodes[i].menuId == parentId){
+      nodes[i].children.push(node)
+    }else {
+      if (nodes[i].children && nodes[i].children.length > 0){
+        addNode(nodes[i].children,parentId, node)
+      }
+    }
+  }
+}
 
 //新增编辑
 const text = {
@@ -193,11 +216,15 @@ const submitForm = () => {
       message: res.msg,
       type: 'success'
     })
-    getData()
+    if (!menuForm.value.menuId){
+      addNode(menuData.value,menuForm.value.parentMenuId,res.data)
+    }
+    loading.value = false
   }).catch(err => {
     loading.value = false
   })
 }
+
 
 const openForm = (data, event) =>{
   if (event === 'edit'){
@@ -234,6 +261,7 @@ getData()
 
 const load = (row, treeNode, resolve) => {
   listMenu({parentMenuId:row.menuId}).then(res => {
+    row.children = res.data
     resolve(res.data)
   })
 }
