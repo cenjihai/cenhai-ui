@@ -18,6 +18,7 @@
         :data="dataSource"
         max-height="900px"
         style="width: 100%"
+        empty-text="无数据～.～"
         v-loading="loading">
       <el-table-column prop="pluginId" label="插件ID"/>
       <el-table-column prop="name" label="插件名称" />

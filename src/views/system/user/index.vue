@@ -11,7 +11,7 @@
         max-height="900px"
         style="width: 100%"
         v-loading="tableLoading"
-
+        empty-text="无数据～.～"
     >
       <el-table-column type="selection" width="55" />
       <el-table-column prop="userId" label="用户编号" />

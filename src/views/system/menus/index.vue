@@ -5,6 +5,7 @@
         v-loading="loading"
         :data="menuData"
         row-key="menuId"
+        empty-text="无数据～.～"
         border
         lazy
         :load="load"

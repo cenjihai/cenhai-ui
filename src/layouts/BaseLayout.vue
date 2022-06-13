@@ -31,14 +31,16 @@
             </a>
           </li>
           <li>
-            <a href="javascript:;">
+            <a href="javascript:;" @click="messageDrawer = true">
               <el-tooltip
                   class="box-item"
                   effect="dark"
                   content="新消息"
                   placement="bottom"
               >
-                <el-icon color="#000" size="20px"><ChatLineRound /></el-icon>
+                <el-badge :value="3">
+                  <el-icon color="#000" size="20px"><ChatLineRound /></el-icon>
+                </el-badge>
               </el-tooltip>
             </a>
           </li>
@@ -75,6 +77,33 @@
       <password />
     </el-dialog>
 
+    <el-drawer v-model="messageDrawer" title="系统消息" >
+      <el-alert title="任务消息"  type="success" show-icon style="margin-bottom: 10px">
+        <template #default>
+          <span>母猪产后护理的事情与上海人无关，特别是北京的奥运会更加不可能打到俄罗斯....</span>
+          <div style="text-align: right">
+            <span>详情</span>
+          </div>
+        </template>
+      </el-alert>
+      <el-alert title="任务消息"  type="error" show-icon style="margin-bottom: 10px">
+        <template #default>
+          <span>母猪产后护理的事情与上海人无关，特别是北京的奥运会更加不可能打到俄罗斯....</span>
+          <div style="text-align: right">
+            <span>详情</span>
+          </div>
+        </template>
+      </el-alert>
+      <el-alert title="任务消息"  type="info" show-icon style="margin-bottom: 10px">
+        <template #default>
+          <span>母猪产后护理的事情与上海人无关，特别是北京的奥运会更加不可能打到俄罗斯....</span>
+          <div style="text-align: right">
+            <span>详情</span>
+          </div>
+        </template>
+      </el-alert>
+    </el-drawer>
+
   </el-container>
 
 
@@ -99,6 +128,9 @@ const route = useRoute()
 const router = useRouter()
 const breadcrumbData = ref(route.matched)
 const editPasswordDialogVisible = ref(false)
+
+
+const messageDrawer = ref(false)
 
 const refresh = () => {
   appStore.$state.routerAlive = false
@@ -178,4 +210,5 @@ userStore.getUserInfo().then(data => {
   top: -10px;
   margin-left: 10px;
 }
+
 </style>

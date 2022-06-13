@@ -10,6 +10,7 @@
         :data="dataSource"
         max-height="900px"
         style="width: 100%"
+        empty-text="无数据～.～"
         v-loading="tableLoading">
       <el-table-column type="selection" width="55" />
       <el-table-column prop="roleId" label="编号"/>

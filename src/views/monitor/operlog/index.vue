@@ -7,7 +7,7 @@
     <el-table
         ref="operlogTableRef"
         :data="dataSource"
-
+        empty-text="无数据～.～"
         style="width: 100%"
         v-loading="tableLoading">
       <el-table-column type="selection" width="30" />
@@ -49,6 +49,7 @@
         v-model="detailsDialogVisible"
         title="详情"
         :fullscreen="false"
+        width="70%"
         destroy-on-close
     >
       <el-descriptions :column="3" border>
