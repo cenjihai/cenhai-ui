@@ -47,8 +47,8 @@ import {reactive, ref} from "vue";
 import {Avatar, Lock, EditPen} from "@element-plus/icons-vue"
 import http from "../utils/http";
 import {useUserStore} from "../store/user";
-import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+import {success} from "../utils/common";
 
 
 const loginFormRef = ref()
@@ -96,10 +96,7 @@ const submitForm = (form) => {
     if (valid){
       userStore.login(loginForm.value).then(res => {
         loading.value = false;
-        ElMessage({
-          message: '登录成功',
-          type: 'success'
-        })
+        success(res)
         setTimeout(function () {
           router.push({path:"/index"})
         },1000)

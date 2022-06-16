@@ -1,6 +1,6 @@
 import axios from "axios";
 import {getToken, removeToken} from "./token";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElNotification} from "element-plus";
 
 const config = {
     timeout: 5000,
@@ -26,9 +26,9 @@ class Http {
         /** 响应拦截**/
         this.service.interceptors.response.use(response => {
             const data = response.data;
-            if (data.code == 200){
+            if (data.code === 200){
                 return data;
-            }else if (data.code == 401){
+            }else if (data.code === 401){
                 ElMessage({
                     message: "未登录，即将前往登录..."
                     ,type: "warning"
@@ -39,9 +39,10 @@ class Http {
                 }, 1000)
                 return Promise.reject(data);
             }else {
-                ElMessage({
-                    message: data.msg,
-                    type: "error"
+                ElNotification({
+                    title: data.msg,
+                    message: data.data,
+                    type: 'error',
                 })
                 return Promise.reject(data)
             }

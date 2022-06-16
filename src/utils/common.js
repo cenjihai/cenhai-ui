@@ -2,10 +2,24 @@
  * 性别数字转中文
  * @param sex
  */
+import {ElNotification} from "element-plus";
+
 export function sexConverter(sex) {
     if (sex == "0")return "未知";
     if (sex == "1")return "男";
     if (sex == "2")return "女";
+}
+
+/**
+ * 成功弹窗
+ * @param response = {msg , data}
+ */
+export function success(response){
+    ElNotification({
+        title: response.msg,
+        message: response.data,
+        type: "success"
+    })
 }
 
 // 日期格式化

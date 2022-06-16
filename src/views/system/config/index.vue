@@ -88,8 +88,8 @@ export default {
 
 import {ref} from "vue";
 import * as faIcons from "@fortawesome/free-solid-svg-icons"
-import {ElMessage} from "element-plus";
 import {batchUpdate, listConfig, listGroup} from "../../../api/system/config";
+import {success} from "../../../utils/common";
 
 const loading = ref(false)
 const groupData = ref()
@@ -105,10 +105,7 @@ const submitForm = () => {
   loading.value = true;
   batchUpdate(configData.value).then(res => {
     loading.value = false
-    ElMessage({
-      message: res.msg,
-      type: 'success'
-    })
+    success(res)
   }).catch(err => {
     loading.value = false
   })
@@ -127,7 +124,6 @@ const getConfigData =(groupId) => {
         console.log(item.configValue)
       }
     })
-
     configData.value = res.data;
   }).catch(err => {
     loading.value = false

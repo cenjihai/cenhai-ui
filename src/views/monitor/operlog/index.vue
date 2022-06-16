@@ -97,7 +97,7 @@
 
       <el-descriptions :column="1" border>
         <el-descriptions-item label="请求响应数据" label-align="right" align="center"
-        >{{details.params}}</el-descriptions-item>
+        ><span v-html="details.params"></span></el-descriptions-item>
         <el-descriptions-item
             label="异常情况"
             label-align="right"
@@ -118,8 +118,8 @@ export default {
 
 import QueryGroup from "@/components/QueryGroup.vue"
 import {ref} from "vue";
-import {ElMessage} from "element-plus";
 import {delOperlog, listOperlog, operlogDetails} from "../../../api/monitor/operlog";
+import {success} from "../../../utils/common";
 
 
 const tableLoading = ref(false)
@@ -184,10 +184,7 @@ const deleteOperlog = (operIds) => {
   loading.value = true;
   delOperlog(operIds).then(res => {
     getData()
-    ElMessage({
-      message: res.msg,
-      type: 'success'
-    })
+    success(res)
     loading.value = false
   }).catch(err => {
     loading.value = false

@@ -150,6 +150,7 @@ import {ref} from "vue";
 import {listMenu,updateOrSaveMenu,delMenu} from "@/api/system/menu";
 import * as faIcons from "@fortawesome/free-solid-svg-icons"
 import {ElMessage} from "element-plus";
+import {success} from "../../../utils/common";
 
 const loading = ref(false)
 const menuData = ref();
@@ -157,7 +158,17 @@ const menuData = ref();
 //状态修改
 const changeStatus = (data) =>{
   menuForm.value = data;
-  submitForm()
+  loading.value = true
+  updateOrSaveMenu(menuForm.value).then(res => {
+    dialogVisible.value = false
+    ElMessage({
+      message: res.msg,
+      type: 'success'
+    })
+    loading.value = false
+  }).catch(err => {
+    loading.value = false
+  })
 }
 
 //删除
@@ -165,10 +176,7 @@ const deleteMenu = (data) => {
   loading.value = true
   delMenu(data.menuId).then(res => {
     loading.value = false
-    ElMessage({
-      message: res.msg,
-      type: "success"
-    })
+    success(res)
     removeNode(menuData.value,data)
   }).catch(err => {
     loading.value = false

@@ -75,6 +75,7 @@ import {getToken} from "../../utils/token";
 import http from "../../utils/http";
 import {ElMessage} from "element-plus";
 import {changePluginStatus, listPlugin, uninstallPlugin} from "../../api/plugin";
+import {success} from "../../utils/common";
 const loading = ref(false)
 
 
@@ -92,10 +93,7 @@ const changeStatus = (row, status) => {
   row.status = status;
   changePluginStatus(row).then(res => {
     loading.value = false
-    ElMessage({
-      message: res.msg,
-      type: "success"
-    })
+    success(res)
   }).catch(err => {
     loading.value = false
   })
@@ -108,10 +106,7 @@ const uninstall = (row) => {
   loading.value = true
   uninstallPlugin(row.pluginId).then(res => {
     loading.value = false
-    ElMessage({
-      message: res.msg,
-      type: "success"
-    })
+    success(res)
     getData()
   }).catch(err => {
     loading.value = false

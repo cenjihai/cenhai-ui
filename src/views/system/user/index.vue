@@ -196,10 +196,10 @@ export default {
 import QueryGroup from "@/components/QueryGroup.vue"
 import {ref} from "vue";
 import {sexConverter} from "@/utils/common"
-import {ElMessage} from "element-plus";
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons"
 import {delUser, getPasswordType, updateRole,listUser, updateOrSaveUserAuthByPassword,updateOrSaveUser} from "@/api/system/user";
 import {getUserRole} from "@/api/system/role";
+import {success} from "../../../utils/common";
 
 
 const loading = ref(false)
@@ -275,10 +275,7 @@ const submitUserAuthForm = () => {
   updateOrSaveUserAuthByPassword(userAuthForm.value).then(res => {
     loading.value = false
     passwordDialogVisible.value = false
-    ElMessage({
-      message: res.msg,
-      type: 'success'
-    })
+    success(res)
   }).catch(err => {
     loading.value = false
   })
@@ -329,10 +326,7 @@ const submitRoleForm = () => {
   loading.value = true;
   updateRole(roleDetails.value.userId,roleDetails.value.userRole).then(res => {
     loading.value = false
-    ElMessage({
-      message: res.msg,
-      type: 'success'
-    })
+    success(res)
   }).catch(err => {
     loading.value = false
   })
@@ -367,10 +361,7 @@ const submitUserForm = () => {
   updateOrSaveUser(userForm.value).then(res => {
     loading.value = false
     dialogFormVisible.value = false
-    ElMessage({
-      message : res.msg,
-      type: 'success'
-    })
+    success(res)
     getData()
   }).catch(err => {
     loading.value = false
@@ -394,10 +385,7 @@ const deleteUser = (userIds) =>{
   delUser(userIds).then(res => {
     loading.value = false
     getData()
-    ElMessage({
-      message: res.msg,
-      type: 'success'
-    })
+    success(res)
   }).catch(err => {
     loading.value = false
   })

@@ -112,10 +112,10 @@ export default {
 
 import QueryGroup from "@/components/QueryGroup.vue"
 import {ref} from "vue";
-import {ElMessage} from "element-plus";
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons"
 import AssignMenu from "@/components/AssignMenu.vue"
 import {delRole, listRole, updateOrSaveRole} from "../../../api/system/role";
+import {success} from "../../../utils/common";
 
 const tableLoading = ref(false)
 const loading = ref(false)
@@ -170,8 +170,12 @@ const formDialogVisible = ref(false)
 const formDialogTitle = ref()
 
 const statusChange = (data) =>{
+  tableLoading.value = true
   updateOrSaveRole(data).then(res => {
-
+    tableLoading.value = false
+    success(res)
+  }).catch(err => {
+    tableLoading.value = false
   })
 }
 
@@ -181,11 +185,7 @@ const submitForm = () => {
     loading.value = false
     formDialogVisible.value = false
     getData()
-    ElMessage({
-      message: res.msg,
-      type: 'success'
-    })
-
+    success(res)
   }).catch(err => {
     loading.value = false
   })
@@ -219,10 +219,7 @@ const deleteRole = (roleIds) => {
   loading.value = true;
   delRole(roleIds).then(res => {
     getData()
-    ElMessage({
-      message: res.msg,
-      type: 'success'
-    })
+    success(res)
     loading.value = false
   }).catch(err => {
     loading.value = false
