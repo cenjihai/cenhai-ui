@@ -115,7 +115,7 @@ import {ref} from "vue";
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons"
 import AssignMenu from "@/components/AssignMenu.vue"
 import {delRole, listRole, updateOrSaveRole} from "../../../api/system/role";
-import {success} from "../../../utils/common";
+import {ElNotification} from "element-plus";
 
 const tableLoading = ref(false)
 const loading = ref(false)
@@ -173,7 +173,7 @@ const statusChange = (data) =>{
   tableLoading.value = true
   updateOrSaveRole(data).then(res => {
     tableLoading.value = false
-    success(res)
+    ElNotification.success({title:res.msg, message: res.data})
   }).catch(err => {
     tableLoading.value = false
   })
@@ -185,7 +185,7 @@ const submitForm = () => {
     loading.value = false
     formDialogVisible.value = false
     getData()
-    success(res)
+    ElNotification.success({title:res.msg, message: res.data})
   }).catch(err => {
     loading.value = false
   })
@@ -219,7 +219,7 @@ const deleteRole = (roleIds) => {
   loading.value = true;
   delRole(roleIds).then(res => {
     getData()
-    success(res)
+    ElNotification.success({title:res.msg, message: res.data})
     loading.value = false
   }).catch(err => {
     loading.value = false

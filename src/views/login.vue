@@ -25,7 +25,7 @@
               <el-input v-model="loginForm.code"  placeholder="图形验证码" :prefix-icon="Lock"/>
             </el-col>
             <el-col :span="11" style="line-height: 0px">
-              <img v-if="captchaImage" @click="getCaptchaImage" :src="'data:image/png;base64,' + captchaImage" class="cenhai-captcha"/>
+              <img v-if="captchaImage" @click="getCaptchaImage" :src="captchaImage" class="cenhai-captcha"/>
             </el-col>
           </el-form-item>
           <el-form-item>
@@ -48,7 +48,7 @@ import {Avatar, Lock, EditPen} from "@element-plus/icons-vue"
 import http from "../utils/http";
 import {useUserStore} from "../store/user";
 import {useRouter} from "vue-router";
-import {success} from "../utils/common";
+import {ElMessage} from "element-plus";
 
 
 const loginFormRef = ref()
@@ -96,7 +96,7 @@ const submitForm = (form) => {
     if (valid){
       userStore.login(loginForm.value).then(res => {
         loading.value = false;
-        success(res)
+        ElMessage.success("登录成功～即将跳转")
         setTimeout(function () {
           router.push({path:"/index"})
         },1000)

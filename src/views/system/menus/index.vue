@@ -149,8 +149,7 @@ export default {
 import {ref} from "vue";
 import {listMenu,updateOrSaveMenu,delMenu} from "@/api/system/menu";
 import * as faIcons from "@fortawesome/free-solid-svg-icons"
-import {ElMessage} from "element-plus";
-import {success} from "../../../utils/common";
+import {ElMessage, ElNotification} from "element-plus";
 
 const loading = ref(false)
 const menuData = ref();
@@ -161,10 +160,7 @@ const changeStatus = (data) =>{
   loading.value = true
   updateOrSaveMenu(menuForm.value).then(res => {
     dialogVisible.value = false
-    ElMessage({
-      message: res.msg,
-      type: 'success'
-    })
+    ElMessage.success(res.msg)
     loading.value = false
   }).catch(err => {
     loading.value = false
@@ -176,7 +172,7 @@ const deleteMenu = (data) => {
   loading.value = true
   delMenu(data.menuId).then(res => {
     loading.value = false
-    success(res)
+    ElNotification.success({title:res.msg, message: res.data})
     removeNode(menuData.value,data)
   }).catch(err => {
     loading.value = false
@@ -221,10 +217,7 @@ const submitForm = () => {
   loading.value = true
   updateOrSaveMenu(menuForm.value).then(res => {
     dialogVisible.value = false
-    ElMessage({
-      message: res.msg,
-      type: 'success'
-    })
+    ElMessage.success(res.msg)
     if (!menuForm.value.menuId){
       addNode(menuData.value,menuForm.value.parentMenuId,res.data)
     }

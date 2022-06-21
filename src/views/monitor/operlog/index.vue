@@ -119,7 +119,7 @@ export default {
 import QueryGroup from "@/components/QueryGroup.vue"
 import {ref} from "vue";
 import {delOperlog, listOperlog, operlogDetails} from "../../../api/monitor/operlog";
-import {success} from "../../../utils/common";
+import {ElNotification} from "element-plus";
 
 
 const tableLoading = ref(false)
@@ -184,7 +184,7 @@ const deleteOperlog = (operIds) => {
   loading.value = true;
   delOperlog(operIds).then(res => {
     getData()
-    success(res)
+    ElNotification.success({title:res.msg, message: res.data})
     loading.value = false
   }).catch(err => {
     loading.value = false

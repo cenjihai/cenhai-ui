@@ -29,28 +29,18 @@ class Http {
             if (data.code === 200){
                 return data;
             }else if (data.code === 401){
-                ElMessage({
-                    message: "未登录，即将前往登录..."
-                    ,type: "warning"
-                })
+                ElMessage.warning("未登录，即将前往登录...")
                 removeToken()
                 setTimeout(function () {
                     location.href = "/login"
                 }, 1000)
                 return Promise.reject(data);
             }else {
-                ElNotification({
-                    title: data.msg,
-                    message: data.data,
-                    type: 'error',
-                })
+                ElNotification.error({title:data.msg,message:data.data})
                 return Promise.reject(data)
             }
         }, error => {
-            ElMessage({
-                message: "服务器异常!",
-                type: 'error'
-            })
+            ElMessage.error("服务器异常，请稍后再试！")
             return Promise.reject(error)
         })
     }

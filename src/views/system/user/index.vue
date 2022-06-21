@@ -18,7 +18,7 @@
       <el-table-column prop="nickname" label="昵称" />
       <el-table-column prop="sex" label="性别" >
         <template #default="scope">
-          {{sexConverter(scope.row.sex)}}
+          {{SEX_TEXT[scope.row.sex]}}
         </template>
       </el-table-column>
       <el-table-column prop="headimgurl" label="头像" >
@@ -195,11 +195,11 @@ export default {
 <script setup>
 import QueryGroup from "@/components/QueryGroup.vue"
 import {ref} from "vue";
-import {sexConverter} from "@/utils/common"
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons"
 import {delUser, getPasswordType, updateRole,listUser, updateOrSaveUserAuthByPassword,updateOrSaveUser} from "@/api/system/user";
 import {getUserRole} from "@/api/system/role";
-import {success} from "../../../utils/common";
+import {SEX_TEXT} from "@/utils/constant";
+import {ElNotification} from "element-plus";
 
 
 const loading = ref(false)
@@ -275,7 +275,7 @@ const submitUserAuthForm = () => {
   updateOrSaveUserAuthByPassword(userAuthForm.value).then(res => {
     loading.value = false
     passwordDialogVisible.value = false
-    success(res)
+    ElNotification.success({title:res.msg, message: res.data})
   }).catch(err => {
     loading.value = false
   })
@@ -326,7 +326,7 @@ const submitRoleForm = () => {
   loading.value = true;
   updateRole(roleDetails.value.userId,roleDetails.value.userRole).then(res => {
     loading.value = false
-    success(res)
+    ElNotification.success({title:res.msg, message: res.data})
   }).catch(err => {
     loading.value = false
   })
@@ -361,7 +361,7 @@ const submitUserForm = () => {
   updateOrSaveUser(userForm.value).then(res => {
     loading.value = false
     dialogFormVisible.value = false
-    success(res)
+    ElNotification.success({title:res.msg, message: res.data})
     getData()
   }).catch(err => {
     loading.value = false
@@ -385,7 +385,7 @@ const deleteUser = (userIds) =>{
   delUser(userIds).then(res => {
     loading.value = false
     getData()
-    success(res)
+    ElNotification.success({title:res.msg, message: res.data})
   }).catch(err => {
     loading.value = false
   })

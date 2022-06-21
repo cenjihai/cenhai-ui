@@ -73,9 +73,8 @@ import {ref} from "vue";
 import {faPlay, faStop} from "@fortawesome/free-solid-svg-icons"
 import {getToken} from "../../utils/token";
 import http from "../../utils/http";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElNotification} from "element-plus";
 import {changePluginStatus, listPlugin, uninstallPlugin} from "../../api/plugin";
-import {success} from "../../utils/common";
 const loading = ref(false)
 
 
@@ -93,7 +92,7 @@ const changeStatus = (row, status) => {
   row.status = status;
   changePluginStatus(row).then(res => {
     loading.value = false
-    success(res)
+    ElNotification.success({title:res.msg, message: res.data})
   }).catch(err => {
     loading.value = false
   })
@@ -106,7 +105,7 @@ const uninstall = (row) => {
   loading.value = true
   uninstallPlugin(row.pluginId).then(res => {
     loading.value = false
-    success(res)
+    ElNotification.success({title:res.msg, message: res.data})
     getData()
   }).catch(err => {
     loading.value = false

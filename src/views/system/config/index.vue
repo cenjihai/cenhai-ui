@@ -89,7 +89,7 @@ export default {
 import {ref} from "vue";
 import * as faIcons from "@fortawesome/free-solid-svg-icons"
 import {batchUpdate, listConfig, listGroup} from "../../../api/system/config";
-import {success} from "../../../utils/common";
+import {ElNotification} from "element-plus";
 
 const loading = ref(false)
 const groupData = ref()
@@ -105,7 +105,7 @@ const submitForm = () => {
   loading.value = true;
   batchUpdate(configData.value).then(res => {
     loading.value = false
-    success(res)
+    ElNotification.success({title:res.msg, message: res.data})
   }).catch(err => {
     loading.value = false
   })

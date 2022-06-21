@@ -38,7 +38,6 @@ const tabClick = (pane, e) => {
       break;
     }
   }
-  console.log(pane)
 }
 
 const logout = () => {
@@ -47,10 +46,7 @@ const logout = () => {
     callback: (action) => {
       if (action === 'confirm'){
         userStore.logout();
-        ElMessage({
-          type: 'success',
-          message: "退出登录成功～即将前往登录页",
-        })
+        ElMessage.success("退出登录成功～即将前往登录页面")
         setTimeout(function () {
           router.push({path:"/login"})
         },1000)
