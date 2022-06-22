@@ -14,8 +14,8 @@ export function operlogDetails(operId){
  * @param operIds
  * @returns {*}
  */
-export function delOperlog(operIds = []){
-    return http.post("/monitor/operlog/delete",operIds)
+export function cleanOperlog(){
+    return http.delete("/monitor/operlog/clean",{})
 }
 
 /**

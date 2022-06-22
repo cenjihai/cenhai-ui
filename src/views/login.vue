@@ -54,8 +54,8 @@ import {ElMessage} from "element-plus";
 const loginFormRef = ref()
 
 const loginForm = ref({
-  username: undefined,
-  password: undefined,
+  username: "admin",
+  password: "123456",
   uuid: undefined,
   code: undefined,
   identity_type: "password"

@@ -115,18 +115,16 @@ const uninstall = (row) => {
 
 //上传
 const uploadSuccess = (response, u, us) =>{
-  ElMessage({
-    message: response.msg,
-    type: 'success'
-  })
+  if (response.code === 200){
+    ElNotification.success({title:response.msg,message: response.data})
+  }else {
+    ElNotification.error({title:response.msg,message: response.data})
+  }
   getData()
 }
 
 const uploadError = (response, u, us) =>{
-  ElMessage({
-    message: "上传失败",
-    type: 'error'
-  })
+  ElNotification.success({title:response.msg,message: response.data})
 }
 
 //查询

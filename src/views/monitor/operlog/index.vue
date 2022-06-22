@@ -2,7 +2,7 @@
   <div v-loading="loading" >
     <query-group :data-source="queryDataSource" :query="query" :reset="reset"/>
     <div style="margin-bottom: 10px">
-      <el-button type="danger" @click="deleteOperlog(null)">删除</el-button>
+      <el-button type="danger" @click="clean()">清空</el-button>
     </div>
     <el-table
         ref="operlogTableRef"
@@ -10,14 +10,11 @@
         empty-text="无数据～.～"
         style="width: 100%"
         v-loading="tableLoading">
-      <el-table-column type="selection" width="30" />
       <el-table-column prop="operId" label="编号" width="55"/>
       <el-table-column prop="userId" label="用户编号" width="90"/>
-      <el-table-column prop="title" label="标题" />
-      <el-table-column prop="info" label="日志说明" />
+      <el-table-column prop="operType" label="标题" />
+      <el-table-column prop="operDesc" label="日志说明" />
       <el-table-column prop="operIp" label="IP地址" />
-      <el-table-column prop="operUrl" label="接口地址" />
-      <el-table-column prop="userDetails" label="用户信息" />
       <el-table-column label="状态">
         <template #default="scope">
           <el-tag v-if="scope.row.status==='0'" type="success">正常</el-tag>
@@ -28,11 +25,6 @@
       <el-table-column label="操作" width="160">
         <template #default="scope">
           <el-button type="primary" size="small" @click="openDialog(scope.row)">详情</el-button>
-          <el-popconfirm title="确定要删除?" @confirm="deleteOperlog([scope.row.operId])">
-            <template #reference>
-              <el-button size="small">删除</el-button>
-            </template>
-          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -52,54 +44,19 @@
         width="70%"
         destroy-on-close
     >
-      <el-descriptions :column="3" border>
-        <el-descriptions-item
-            label="操作人"
-            label-align="right"
-            align="center"
-        >{{details.userId}}</el-descriptions-item>
-        <el-descriptions-item
-            label="所在IP"
-            label-align="right"
-            align="center"
-        >{{details.operIp}}</el-descriptions-item>
-        <el-descriptions-item
-            label="登录信息"
-            label-align="right"
-            align="center"
-        >{{details.userDetails}}</el-descriptions-item>
-        <el-descriptions-item label="请求接口" label-align="right" align="center"
-        >{{details.operUrl}}</el-descriptions-item>
-      </el-descriptions>
-
-
-      <el-descriptions :column="2" border>
-        <el-descriptions-item
-            label="日志标题"
-            label-align="right"
-            align="center"
-        >{{details.title}}</el-descriptions-item>
-        <el-descriptions-item
-            label="日志说明"
-            label-align="right"
-            align="center"
-        >{{details.info}}</el-descriptions-item>
-        <el-descriptions-item label="处理器" label-align="right" align="center"
-        >{{details.action}}</el-descriptions-item>
-
-
-        <el-descriptions-item label="发生时间" label-align="right" align="center"
-        >{{details.createTime}}</el-descriptions-item>
-
-
-      </el-descriptions>
-
-
       <el-descriptions :column="1" border>
-        <el-descriptions-item label="请求响应数据" label-align="right" align="center"
-        ><span v-html="details.params"></span></el-descriptions-item>
         <el-descriptions-item
-            label="异常情况"
+            label="请求参数"
+            label-align="right"
+            align="center"
+        >{{details.reqParam}}</el-descriptions-item>
+        <el-descriptions-item
+            label="响应数据"
+            label-align="right"
+            align="center"
+        >{{details.respData}}</el-descriptions-item>
+        <el-descriptions-item
+            label="异常数据"
             label-align="right"
             align="center"
         >{{details.errMsg}}</el-descriptions-item>
@@ -118,7 +75,7 @@ export default {
 
 import QueryGroup from "@/components/QueryGroup.vue"
 import {ref} from "vue";
-import {delOperlog, listOperlog, operlogDetails} from "../../../api/monitor/operlog";
+import {cleanOperlog, listOperlog, operlogDetails} from "../../../api/monitor/operlog";
 import {ElNotification} from "element-plus";
 
 
@@ -138,7 +95,7 @@ const queryDataSource ={
     label: '用户编号',
     widget: 'input'
   },
-  title: {
+  operType: {
     label: '日志标题',
     widget: 'input'
   },
@@ -172,17 +129,9 @@ const openDialog = (data) => {
 }
 
 //删除
-const deleteOperlog = (operIds) => {
-  if (!operIds){
-    let selects = operlogTableRef.value.getSelectionRows();
-    if (selects.length == 0)return
-    operIds = []
-    selects.forEach(item => {
-      operIds.push(item.operId)
-    })
-  }
+const clean = () => {
   loading.value = true;
-  delOperlog(operIds).then(res => {
+  cleanOperlog().then(res => {
     getData()
     ElNotification.success({title:res.msg, message: res.data})
     loading.value = false
