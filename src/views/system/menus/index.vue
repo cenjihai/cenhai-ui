@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="success" @click="openForm({menuId:0},'add')">添加</el-button>
+    <el-button style="margin-bottom: 10px" type="success" @click="openForm({menuId:0},'add')">添加</el-button>
     <el-table
         v-loading="loading"
         :data="menuData"
