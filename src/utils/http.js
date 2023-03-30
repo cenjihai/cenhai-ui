@@ -4,7 +4,7 @@ import {ElMessage, ElNotification} from "element-plus";
 
 const config = {
     timeout: 5000,
-    baseURL: "http://localhost:8080"
+    baseURL: "http://localhost:8888"
     //baseURL: "http://api.cenjihai.cn"
 }
 
@@ -36,7 +36,7 @@ class Http {
                 }, 1000)
                 return Promise.reject(data);
             }else {
-                ElNotification.error({title:data.msg,message:data.data})
+                ElNotification.error(data.msg)
                 return Promise.reject(data)
             }
         }, error => {

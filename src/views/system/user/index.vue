@@ -26,11 +26,6 @@
           <img :src="scope.row.headimgurl" style="width: 30px;height: 30px;" />
         </template>
       </el-table-column>
-      <el-table-column label="地址" >
-        <template #default="scope">
-          {{scope.row.country + scope.row.province + scope.row.city}}
-        </template>
-      </el-table-column>
       <el-table-column prop="createTime" label="创建时间" />
       <el-table-column prop="updateTime" label="更新时间" />
       <el-table-column prop="remark" label="备注" />
@@ -80,22 +75,6 @@
             <el-radio label="2" size="large">女</el-radio>
             <el-radio label="0" size="large">未知</el-radio>
           </el-radio-group>
-        </el-form-item>
-        <el-form-item label="所在地址">
-          <div style="display: flex">
-            <el-input
-                v-model="userForm.country"
-                placeholder="国家"
-            />
-            <el-input
-                v-model="userForm.province"
-                placeholder="省份/地区/州"
-            />
-            <el-input
-                v-model="userForm.city"
-                placeholder="城市/区"
-            />
-          </div>
         </el-form-item>
         <el-form-item label="备注信息">
           <el-input
